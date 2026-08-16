@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sanak-auction-live
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: ADMIN_PASSWORD
+        value: "9981"
