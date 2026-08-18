@@ -1029,6 +1029,36 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
 }
 </style>
 
+
+<style id="intro-v11-image-visibility-fix">
+#introScreen .intro-v10-art img{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  width:100%!important;
+  height:auto!important;
+  object-fit:contain!important;
+}
+#introScreen{
+  background:#070503!important;
+}
+@media(max-width:600px){
+  .intro-v10-art{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+  }
+  .intro-v10-art img{
+    max-height:68vh!important;
+    object-fit:contain!important;
+    object-position:center top!important;
+  }
+  .intro-v10-entry{
+    margin-top:6px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="glow-bg"></div>
