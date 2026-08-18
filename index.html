@@ -842,10 +842,15 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
 .payout-section .custom-money-row{display:flex;gap:5px;margin-top:6px}
 .payout-section .custom-money-row input{height:36px;font-size:11px;min-width:0}
 .payout-section .custom-money-row button{height:36px;padding:0 12px}
-.right-admin-actions{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:5px;margin-top:7px}
+.right-admin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:7px}
 .right-admin-actions .admin-btn{min-width:0;padding:9px 4px;font-size:10px}
 @media(max-width:900px){.premium-right-rail .log-list{max-height:240px}}
 
+
+.empty-live-users,.admin-no-users{
+  margin:10px;padding:22px 12px;text-align:center;border:1px dashed rgba(247,213,138,.14);
+  border-radius:14px;color:#777;font-size:12px
+}
 </style>
 </head>
 <body>
@@ -894,7 +899,7 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
 
     <div class="main-grid">
       <aside class="panel left-panel">
-        <div class="panel-title">🟢 현재 참가자 <span id="memberCount">8</span>명</div>
+        <div class="panel-title">🟢 현재 참가자 <span id="memberCount">0</span>명</div>
         <div class="members" id="members"></div>
       </aside>
 
@@ -924,7 +929,7 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
                 <div class="title-subcopy">BACCARAT MOUNTAIN CLUB · PRIVATE AUCTION</div>
               </div>
 
-              <div class="title-editor luxury-editor">
+              <div class="title-editor luxury-editor host-only">
                 <input id="slotTitleInput" maxlength="40" placeholder="경매 제목을 입력하세요">
                 <button id="slotTitleApply" type="button">TITLE SET</button>
               </div>
@@ -953,7 +958,7 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
               <button class="bid-btn hot" data-inc="50000">+ 5만</button>
               <button class="bid-btn gold" data-inc="100000">+ 10만</button>
             </div>
-            <div class="bid-note">입찰 버튼을 누르는 즉시 올린 금액만큼 보유금이 차감되고, 입찰 팝업이 표시됩니다.</div>
+            <div class="bid-note">입찰 중에는 최고입찰 금액이 임시 보류됩니다. 유찰/탈락 시 자동 반환되고, 낙찰 확정 시에만 실제 차감됩니다.</div>
           </div>
         </div>
       </main>
@@ -1001,21 +1006,22 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
           <div class="right-admin-section payout-section">
             <div class="right-section-title">💰 경매머니 지급</div>
             <div class="money-buttons">
-              <button class="money-add-btn" data-money="100000">+10만</button>
-              <button class="money-add-btn" data-money="200000">+20만</button>
-              <button class="money-add-btn" data-money="300000">+30만</button>
-              <button class="money-add-btn" data-money="500000">+50만</button>
+              <button class="money-add-btn" data-money="100000">10만</button>
+              <button class="money-add-btn" data-money="200000">20만</button>
+              <button class="money-add-btn" data-money="300000">30만</button>
+              <button class="money-add-btn" data-money="500000">50만</button>
             </div>
             <div class="custom-money-row">
-              <input id="customMoneyInput" type="number" min="0" step="10000" placeholder="직접 금액 입력">
-              <button id="customMoneyGive">지급</button>
+              <input id="customMoneyInput" type="number" min="0" step="10000" placeholder="직접 금액 입력 (0 가능)">
+              <button id="customMoneyGive">설정</button>
             </div>
           </div>
 
           <div class="right-admin-actions">
             <button class="admin-btn" id="demoBid">랜덤 입찰</button>
-            <button class="admin-btn end" id="endAuction">경매 마감</button>
-            <button class="admin-btn new-round" id="newAuction">새 경매 재설정</button>
+            <button class="admin-btn end" id="endAuction">낙찰 확정</button>
+            <button class="admin-btn" id="cancelAuction">유찰/환불</button>
+            <button class="admin-btn new-round" id="newAuction">새 경매</button>
           </div>
         </div>
       </aside>
@@ -1023,8 +1029,9 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
 
     <div class="bottom-admin host-only">
       <button class="admin-btn" id="demoBid">랜덤 입찰 테스트</button>
-      <button class="admin-btn end" id="endAuction">경매 마감 테스트</button>
-      <button class="admin-btn new-round" id="newAuction">새 경매 재설정</button>
+      <button class="admin-btn end" id="endAuction">낙찰 확정</button>
+      <button class="admin-btn" id="cancelAuction">유찰/환불</button>
+      <button class="admin-btn new-round" id="newAuction">새 경매</button>
     </div>
 
     <section class="panel admin-money-panel host-only">
@@ -1050,16 +1057,16 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
           </div>
           <div class="admin-selected">선택 참가자 <strong id="selectedPlayerName">없음</strong></div>
           <div class="money-buttons">
-            <button class="money-add-btn" data-money="100000">+10만</button>
-            <button class="money-add-btn" data-money="200000">+20만</button>
-            <button class="money-add-btn" data-money="300000">+30만</button>
-            <button class="money-add-btn" data-money="500000">+50만</button>
+            <button class="money-add-btn" data-money="100000">10만</button>
+            <button class="money-add-btn" data-money="200000">20만</button>
+            <button class="money-add-btn" data-money="300000">30만</button>
+            <button class="money-add-btn" data-money="500000">50만</button>
           </div>
           <div class="custom-money-row">
-            <input id="customMoneyInput" type="number" min="0" step="10000" placeholder="직접 금액 입력">
-            <button id="customMoneyGive">지급</button>
+            <input id="customMoneyInput" type="number" min="0" step="10000" placeholder="직접 금액 입력 (0 가능)">
+            <button id="customMoneyGive">설정</button>
           </div>
-          <div class="admin-note">방장이 지급한 경매머니가 보유금이 됩니다. 입찰할 때마다 올린 금액이 즉시 차감됩니다.</div>
+          <div class="admin-note">선택한 참가자의 경매보유금을 정확한 금액으로 설정합니다. 0 입력 후 설정하면 0원으로 초기화됩니다. 낙찰 확정 시에만 실제 차감됩니다.</div>
         </div>
       </div>
     </section>
@@ -1114,461 +1121,221 @@ body.admin-mode .right-admin-tools.host-only{display:block!important}
   </div>
 </div>
 
+<script src="/socket.io/socket.io.js"></script>
 <script>
-const introScreen = document.getElementById('introScreen');
-const auctionScreen = document.getElementById('auctionScreen');
-const nickname = document.getElementById('nickname');
-const joinBtn = document.getElementById('joinBtn');
-const introError = document.getElementById('introError');
-const myName = document.getElementById('myName');
-const priceEl = document.getElementById('price');
-const leaderEl = document.getElementById('leader');
-const membersEl = document.getElementById('members');
-const memberCount = document.getElementById('memberCount');
-const logList = document.getElementById('logList');
-const flash = document.getElementById('flash');
-const flashName = document.getElementById('flashName');
-const flashPrice = document.getElementById('flashPrice');
-const countdown = document.getElementById('countdown');
-const countNum = document.getElementById('countNum');
-const soldOverlay = document.getElementById('soldOverlay');
-const soldWinner = document.getElementById('soldWinner');
-const soldPrice = document.getElementById('soldPrice');
-const bidBattlePopup = document.getElementById('bidBattlePopup');
-const battleName = document.getElementById('battleName');
-const battleInc = document.getElementById('battleInc');
-const battleTotal = document.getElementById('battleTotal');
-const battleBalance = document.getElementById('battleBalance');
+const $ = id => document.getElementById(id);
+const introScreen = $('introScreen');
+const auctionScreen = $('auctionScreen');
+const nickname = $('nickname');
+const joinBtn = $('joinBtn');
+const introError = $('introError');
+const myName = $('myName');
+const priceEl = $('price');
+const leaderEl = $('leader');
+const membersEl = $('members');
+const memberCount = $('memberCount');
+const logList = $('logList');
+const flash = $('flash');
+const flashName = $('flashName');
+const flashPrice = $('flashPrice');
+const countdown = $('countdown');
+const countNum = $('countNum');
+const soldOverlay = $('soldOverlay');
+const soldWinner = $('soldWinner');
+const soldPrice = $('soldPrice');
+const bidBattlePopup = $('bidBattlePopup');
+const battleName = $('battleName');
+const battleInc = $('battleInc');
+const battleTotal = $('battleTotal');
+const battleBalance = $('battleBalance');
+const slotTitleDisplay = $('slotTitleDisplay');
+const slotTitleInput = $('slotTitleInput');
+const slotTitleApply = $('slotTitleApply');
+const startPriceInput = $('startPriceInput');
+const startPriceCurrent = $('startPriceCurrent');
+const auctionStatusText = $('auctionStatusText');
 
-let currentPrice = 0;
-let currentLeader = '운영자 START';
+const socket = io();
 let userName = '';
-let locked = false;
-
+let liveParticipants = [];
+let adminBalances = {};
+let adminHolds = {};
 let selectedAdminPlayer = null;
-let balances = {};
+let currentState = {title:'오늘의 메인 슬롯',startPrice:0,currentPrice:0,leader:null,status:'ready',logs:[]};
+let adminLoggedIn = false;
 
-
-const demoMembers = ['코카파파','무무깡','올라이','박력','사또','찌니파워','미르'];
-
-function money(n) {
-  return n.toLocaleString('ko-KR') + '원';
+function money(n){ return Math.max(0,Number(n)||0).toLocaleString('ko-KR') + '원'; }
+function escapeHtml(v){ return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function showToast(msg='처리되었습니다.'){
+  const t=$('noMoneyToast'); if(!t) return;
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>t.classList.remove('show'),1800);
 }
-
-function renderMembers() {
-  const all = [userName || '나', ...demoMembers];
-  all.forEach(n => { if(!(n in balances)) balances[n] = 0; });
-  memberCount.textContent = all.length;
-  membersEl.innerHTML = all.map((n,i)=>`
-    <div class="member">
-      <div class="member-left">
-        <div class="avatar">${n.slice(0,1)}</div>
-        <div class="member-name">${n}${i===0?' (나)':''}</div>
-      </div>
-      <span class="online"></span>
-    </div>
-  `).join('');
-  renderAdminPlayers();
-  updateMyBalance();
-}
-
-
+function isAdmin(){ return adminLoggedIn && document.body.classList.contains('admin-mode'); }
+function myParticipant(){ return liveParticipants.find(p=>p.name===userName); }
 function updateMyBalance(){
-  const el = document.getElementById('myBalance');
-  if(!el) return;
-  const key = userName || '나';
-  el.textContent = money(balances[key] || 0);
+  const p=myParticipant();
+  const total=p?.balance||0, held=p?.held||0;
+  $('myBalance').textContent = money(total-held);
 }
-
+function renderMembers(){
+  memberCount.textContent=liveParticipants.length;
+  if(!liveParticipants.length){
+    membersEl.innerHTML='<div class="empty-live-users">현재 접속자가 없습니다.</div>';
+  } else {
+    membersEl.innerHTML=liveParticipants.map(p=>`<div class="member"><div class="member-left"><div class="avatar">${escapeHtml((p.name||'?').slice(0,1))}</div><div class="member-name">${escapeHtml(p.name)}${p.name===userName?' (나)':''}</div></div><span class="online" title="접속 중"></span></div>`).join('');
+  }
+  updateMyBalance(); renderAdminPlayers();
+}
+function allAdminLists(){ return [...document.querySelectorAll('#adminPlayerList')]; }
+function allSelectedLabels(){ return [...document.querySelectorAll('#selectedPlayerName')]; }
 function renderAdminPlayers(){
-  const wrap = document.getElementById('adminPlayerList');
-  if(!wrap) return;
-  const all = [userName || '나', ...demoMembers];
-  wrap.innerHTML = all.map(n=>`
-    <div class="admin-player-card ${selectedAdminPlayer===n?'selected':''}" data-player="${n}">
-      <div class="admin-player-top">
-        <div class="admin-player-name">${n}${n===userName?' (나)':''}</div>
-        <span class="online"></span>
-      </div>
-      <div class="admin-player-money">${money(balances[n] || 0)}</div>
-    </div>
-  `).join('');
-  wrap.querySelectorAll('.admin-player-card').forEach(card=>{
-    card.addEventListener('click', ()=>{
-      selectedAdminPlayer = card.dataset.player;
-      document.getElementById('selectedPlayerName').textContent = selectedAdminPlayer;
-      renderAdminPlayers();
-    });
+  if(selectedAdminPlayer && !liveParticipants.some(p=>p.name===selectedAdminPlayer)) selectedAdminPlayer=null;
+  allSelectedLabels().forEach(el=>el.textContent=selectedAdminPlayer||'없음');
+  allAdminLists().forEach(wrap=>{
+    if(!liveParticipants.length){ wrap.innerHTML='<div class="admin-no-users">현재 접속자가 없습니다.</div>'; return; }
+    wrap.innerHTML=liveParticipants.map(p=>{
+      const total=adminBalances[p.name] ?? p.balance ?? 0;
+      const held=adminHolds[p.name] ?? p.held ?? 0;
+      const available=Math.max(0,total-held);
+      return `<div class="admin-player-card ${selectedAdminPlayer===p.name?'selected':''}" data-player="${escapeHtml(p.name)}"><div class="admin-player-top"><div class="admin-player-name">${escapeHtml(p.name)}${p.name===userName?' (나)':''}</div><span class="online"></span></div><div class="admin-player-money">보유 ${money(total)}${held?` · 보류 ${money(held)} · 사용가능 ${money(available)}`:''}</div></div>`;
+    }).join('');
+    wrap.querySelectorAll('.admin-player-card').forEach(card=>card.addEventListener('click',()=>{selectedAdminPlayer=card.dataset.player; renderAdminPlayers();}));
   });
 }
-
-function giveMoney(amount){
-  if(!selectedAdminPlayer) return;
-  balances[selectedAdminPlayer] = (balances[selectedAdminPlayer] || 0) + amount;
-  localStorage.setItem('baksan_balances', JSON.stringify(balances));
-  renderAdminPlayers();
-  updateMyBalance();
+function renderLogs(logs=[]){
+  logList.innerHTML=logs.map(x=>{
+    const d=new Date(x.ts||Date.now());
+    const ts=d.toLocaleTimeString('ko-KR',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    return `<div class="log-item"><div class="log-top"><span class="log-name">${escapeHtml(x.name)}</span><span class="log-time">${ts}</span></div><div class="log-amount">+${money(x.inc)} → ${money(x.total)}</div></div>`;
+  }).join('');
+}
+function renderState(st){
+  currentState={...currentState,...st};
+  slotTitleDisplay.textContent=currentState.title||'오늘의 메인 슬롯';
+  if(isAdmin()) slotTitleInput.value=currentState.title||'';
+  priceEl.textContent=money(currentState.currentPrice);
+  leaderEl.textContent=currentState.leader||'운영자 START';
+  document.querySelectorAll('#startPriceCurrent').forEach(el=>el.textContent=money(currentState.startPrice));
+  document.querySelectorAll('#startPriceInput').forEach(el=>el.value=currentState.startPrice);
+  renderLogs(currentState.logs||[]);
+  const statusText=currentState.status==='sold'?'낙찰 완료':currentState.leader?'경매 진행 중':'경매 준비 중';
+  if(auctionStatusText) auctionStatusText.textContent=statusText;
+}
+function showBidBattle(name,inc,total,available){
+  battleName.textContent=name+' 입찰!'; battleInc.textContent='+'+money(inc); battleTotal.textContent=money(total); battleBalance.textContent=money(available);
+  bidBattlePopup.classList.remove('show'); void bidBattlePopup.offsetWidth; bidBattlePopup.classList.add('show');
+  clearTimeout(window.__bidBattleTimer); window.__bidBattleTimer=setTimeout(()=>bidBattlePopup.classList.remove('show'),900);
 }
 
-function showNoMoney(msg='보유금이 부족합니다.'){
-  const t = document.getElementById('noMoneyToast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 1600);
+socket.on('participants', list=>{ liveParticipants=Array.isArray(list)?list:[]; renderMembers(); });
+socket.on('admin_state', data=>{ adminBalances=data?.balances||{}; adminHolds=data?.holds||{}; if(Array.isArray(data?.participants)) liveParticipants=data.participants; renderMembers(); });
+socket.on('auction_state', st=>renderState(st||{}));
+socket.on('connect', ()=>{ if(sessionStorage.getItem('baksan_admin_password')) loginAdmin(sessionStorage.getItem('baksan_admin_password'), true); });
+
+function join(){
+  const name=nickname.value.trim();
+  if(!name){ introError.style.display='block'; nickname.focus(); return; }
+  joinBtn.disabled=true; joinBtn.textContent='접속 중...'; introError.style.display='none';
+  socket.emit('join_auction',{name}, result=>{
+    joinBtn.disabled=false; joinBtn.textContent='경매 참가';
+    if(!result?.ok){ introError.textContent=result?.message||'접속에 실패했습니다.'; introError.style.display='block'; return; }
+    userName=result.name; localStorage.setItem('baksan_nickname',userName); myName.textContent=userName;
+    selectedAdminPlayer=userName; introScreen.classList.remove('active'); auctionScreen.classList.add('active'); window.scrollTo(0,0);
+    renderMembers();
+  });
 }
+joinBtn.addEventListener('click',join); nickname.addEventListener('keydown',e=>{if(e.key==='Enter')join()});
+const savedName=localStorage.getItem('baksan_nickname'); if(savedName) nickname.value=savedName;
 
-function addLog(name, inc, total) {
-  const now = new Date();
-  const hh = String(now.getHours()).padStart(2,'0');
-  const mm = String(now.getMinutes()).padStart(2,'0');
-  const ss = String(now.getSeconds()).padStart(2,'0');
-  const item = document.createElement('div');
-  item.className = 'log-item';
-  item.innerHTML = `
-    <div class="log-top">
-      <span class="log-name">${name}</span>
-      <span class="log-time">${hh}:${mm}:${ss}</span>
-    </div>
-    <div class="log-amount">+${money(inc)} → ${money(total)}</div>
-  `;
-  logList.prepend(item);
+document.querySelectorAll('.bid-btn').forEach(btn=>btn.addEventListener('click',()=>{
+  if(!userName){ showToast('먼저 경매에 참가해주세요.'); return; }
+  const inc=Number(btn.dataset.inc);
+  socket.emit('place_bid',{inc}, result=>{
+    if(!result?.ok){ showToast(result?.message||'입찰할 수 없습니다.'); return; }
+    showBidBattle(userName,inc,currentState.currentPrice+inc,result.available);
+  });
+}));
+
+function setBalance(amount){
+  if(!isAdmin()){ showToast('방장 권한이 필요합니다.'); return; }
+  if(!selectedAdminPlayer){ showToast('먼저 참가자 닉네임을 선택해주세요.'); return; }
+  const n=Math.floor(Number(amount));
+  if(!Number.isFinite(n)||n<0){ showToast('0원 이상의 금액을 입력해주세요.'); return; }
+  socket.emit('admin_set_balance',{name:selectedAdminPlayer,amount:n},r=>showToast(r?.ok?`${selectedAdminPlayer} 보유금 → ${money(n)}`:(r?.message||'설정 실패')));
 }
+document.querySelectorAll('.money-add-btn').forEach(btn=>btn.addEventListener('click',()=>setBalance(btn.dataset.money)));
+document.querySelectorAll('#customMoneyGive').forEach((btn,i)=>btn.addEventListener('click',()=>{
+  const inputs=[...document.querySelectorAll('#customMoneyInput')]; const input=inputs[i]||inputs[0];
+  const raw=input?.value;
+  if(raw===''||raw==null){ showToast('금액을 입력해주세요. 0원도 가능합니다.'); return; }
+  setBalance(raw); if(input) input.value='';
+}));
 
-function showFlash(name,total) {
-  flashName.textContent = name;
-  flashPrice.textContent = money(total);
-  flash.classList.add('show');
-  setTimeout(()=>flash.classList.remove('show'), 650);
+function setStartPrice(v){
+  if(!isAdmin()){ showToast('방장 권한이 필요합니다.'); return; }
+  const n=Math.floor(Number(v)); if(!Number.isFinite(n)||n<0){showToast('올바른 시작가를 입력해주세요.');return;}
+  socket.emit('admin_set_start_price',{amount:n},r=>showToast(r?.ok?`시작가 ${money(n)} 설정`:(r?.message||'설정 실패')));
 }
-
-function showBidBattle(name, inc, total, balance){
-  battleName.textContent = name + ' 입찰!';
-  battleInc.textContent = '+' + money(inc);
-  battleTotal.textContent = money(total);
-  battleBalance.textContent = money(balance);
-  bidBattlePopup.classList.remove('show');
-  void bidBattlePopup.offsetWidth;
-  bidBattlePopup.classList.add('show');
-
-  priceEl.classList.remove('bump');
-  void priceEl.offsetWidth;
-  priceEl.classList.add('bump');
-
-  clearTimeout(window.__bidBattleTimer);
-  window.__bidBattleTimer = setTimeout(()=>{
-    bidBattlePopup.classList.remove('show');
-  }, 900);
-}
-
-function placeBid(name, inc) {
-  if(locked) return;
-
-  const available = balances[name] || 0;
-  if(inc > available){
-    if(name === userName) showNoMoney('보유금이 부족합니다. 방장에게 경매머니를 받아주세요.');
-    return;
-  }
-
-  // 입찰 버튼을 누르는 순간, 올린 금액만큼 보유금에서 즉시 차감
-  balances[name] = available - inc;
-  currentPrice += inc;
-  currentLeader = name;
-
-  localStorage.setItem('baksan_balances', JSON.stringify(balances));
-  priceEl.textContent = money(currentPrice);
-  leaderEl.textContent = currentLeader;
-
-  renderAdminPlayers();
-  updateMyBalance();
-  addLog(name, inc, currentPrice);
-  showBidBattle(name, inc, currentPrice, balances[name]);
-}
-
-function join() {
-  const name = nickname.value.trim();
-  if(!name) {
-    introError.style.display = 'block';
-    nickname.focus();
-    return;
-  }
-  userName = name;
-  localStorage.setItem('baksan_nickname', name);
-  const storedBalances = localStorage.getItem('baksan_balances');
-  if(storedBalances){
-    try{ balances = {...balances, ...JSON.parse(storedBalances)}; }catch(e){}
-  }
-  if(!(userName in balances)) balances[userName] = 0;
-  selectedAdminPlayer = userName;
-  myName.textContent = name;
-  renderMembers();
-  introScreen.classList.remove('active');
-  auctionScreen.classList.add('active');
-  window.scrollTo(0,0);
-}
-
-joinBtn.addEventListener('click', join);
-nickname.addEventListener('keydown', e=>{if(e.key==='Enter') join()});
-nickname.addEventListener('input', ()=>{if(nickname.value.trim()) introError.style.display='none'});
-
-document.querySelectorAll('.bid-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>placeBid(userName || '나', Number(btn.dataset.inc)));
-});
-
-document.getElementById('demoBid').addEventListener('click', ()=>{
-  const names = demoMembers;
-  const incs = [5000,10000,20000,30000,50000,100000];
-  const n = names[Math.floor(Math.random()*names.length)];
-  const inc = incs[Math.floor(Math.random()*incs.length)];
-  if((balances[n]||0) < inc) balances[n] = 500000;
-  renderAdminPlayers();
-  placeBid(n, inc);
-});
-
-document.getElementById('endAuction').addEventListener('click', async ()=>{
-  if(locked) return;
-  locked = true;
-  countdown.classList.add('show');
-  for(let i=5;i>=1;i--) {
-    countNum.textContent = i;
-    await new Promise(r=>setTimeout(r,650));
-  }
-  countdown.classList.remove('show');
-  soldWinner.textContent = currentLeader;
-  soldPrice.textContent = money(currentPrice);
-  // v1.3 INDEX PREMIUM부터는 입찰할 때마다 올린 금액이 즉시 차감되므로
-  // 낙찰 시 추가 차감하지 않습니다.
-  soldOverlay.classList.add('show');
-});
-
-soldOverlay.addEventListener('click', ()=>{
-  soldOverlay.classList.remove('show');
-});
-
-
-const slotTitleDisplay = document.getElementById('slotTitleDisplay');
-const slotTitleInput = document.getElementById('slotTitleInput');
-const slotTitleApply = document.getElementById('slotTitleApply');
+document.querySelectorAll('#startPriceApply').forEach((btn,i)=>btn.addEventListener('click',()=>{const inputs=[...document.querySelectorAll('#startPriceInput')]; setStartPrice((inputs[i]||inputs[0]).value);}));
+document.querySelectorAll('.start-price-presets button').forEach(btn=>btn.addEventListener('click',()=>setStartPrice(btn.dataset.start)));
 
 function applySlotTitle(){
-  const title = slotTitleInput.value.trim();
-  if(!title){
-    slotTitleInput.focus();
-    return;
-  }
-  slotTitleDisplay.textContent = title;
-  localStorage.setItem('baksan_slot_title', title);
+  if(!isAdmin()){ showToast('방장만 제목을 설정할 수 있습니다.'); return; }
+  const title=slotTitleInput.value.trim(); if(!title){slotTitleInput.focus();return;}
+  socket.emit('admin_set_title',{title},r=>showToast(r?.ok?'경매 제목이 변경되었습니다.':(r?.message||'변경 실패')));
 }
+slotTitleApply.addEventListener('click',applySlotTitle); slotTitleInput.addEventListener('keydown',e=>{if(e.key==='Enter')applySlotTitle()});
 
-slotTitleApply.addEventListener('click', applySlotTitle);
-slotTitleInput.addEventListener('keydown', e=>{
-  if(e.key === 'Enter') applySlotTitle();
-});
-
-const savedSlotTitle = localStorage.getItem('baksan_slot_title');
-if(savedSlotTitle){
-  slotTitleDisplay.textContent = savedSlotTitle;
-  slotTitleInput.value = savedSlotTitle;
+function closeAuction(){
+  if(!isAdmin()) return showToast('방장 권한이 필요합니다.');
+  socket.emit('admin_close_auction',{},async r=>{
+    if(!r?.ok) return showToast(r?.message||'마감 실패');
+    if(!r.sold) return showToast('입찰자가 없어 유찰 처리되었습니다. 보류금은 모두 반환되었습니다.');
+    countdown.classList.add('show');
+    for(let i=3;i>=1;i--){countNum.textContent=i; await new Promise(res=>setTimeout(res,500));}
+    countdown.classList.remove('show'); soldWinner.textContent=r.winner; soldPrice.textContent=money(r.price); soldOverlay.classList.add('show');
+  });
 }
-
-
-document.querySelectorAll('.money-add-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>giveMoney(Number(btn.dataset.money)));
-});
-document.getElementById('customMoneyGive').addEventListener('click', ()=>{
-  const input = document.getElementById('customMoneyInput');
-  const amount = Number(input.value);
-  if(amount > 0){
-    giveMoney(amount);
-    input.value = '';
-  }
-});
-
-
-try{
-  const storedBalancesInit = localStorage.getItem('baksan_balances');
-  if(storedBalancesInit) balances = JSON.parse(storedBalancesInit) || {};
-}catch(e){ balances = {}; }
-demoMembers.forEach(n=>{ if(!(n in balances)) balances[n] = 0; });
-
-
-const startPriceInput = document.getElementById('startPriceInput');
-const startPriceApply = document.getElementById('startPriceApply');
-const startPriceCurrent = document.getElementById('startPriceCurrent');
-
-function setStartPrice(value){
-  const n = Math.floor(Number(value));
-  if(!Number.isFinite(n) || n < 0){
-    showNoMoney('올바른 시작가를 입력해주세요.');
-    return;
-  }
-  if(currentLeader !== '운영자 START' && logList.children.length > 0){
-    showNoMoney('입찰이 시작된 뒤에는 시작가를 변경할 수 없습니다.');
-    return;
-  }
-  currentPrice = n;
-  currentLeader = '운영자 START';
-  priceEl.textContent = money(currentPrice);
-  leaderEl.textContent = currentLeader;
-  startPriceCurrent.textContent = money(n);
-  startPriceInput.value = n;
-  localStorage.setItem('baksan_start_price', String(n));
+function cancelAuction(){
+  if(!isAdmin()) return showToast('방장 권한이 필요합니다.');
+  socket.emit('admin_cancel_auction',{},r=>showToast(r?.ok?'유찰/취소 처리 완료 · 보류금 전액 반환':(r?.message||'처리 실패')));
 }
-
-startPriceApply.addEventListener('click', ()=>setStartPrice(startPriceInput.value));
-startPriceInput.addEventListener('keydown', e=>{
-  if(e.key === 'Enter') setStartPrice(startPriceInput.value);
-});
-document.querySelectorAll('.start-price-presets button').forEach(btn=>{
-  btn.addEventListener('click', ()=>setStartPrice(btn.dataset.start));
-});
-
-const savedStartPrice = Number(localStorage.getItem('baksan_start_price'));
-if(Number.isFinite(savedStartPrice) && savedStartPrice >= 0 && localStorage.getItem('baksan_start_price') !== null){
-  currentPrice = savedStartPrice;
-  priceEl.textContent = money(currentPrice);
-  startPriceCurrent.textContent = money(currentPrice);
-  startPriceInput.value = currentPrice;
-}else{
-  startPriceInput.value = currentPrice;
+function newAuction(){
+  if(!isAdmin()) return showToast('방장 권한이 필요합니다.');
+  socket.emit('admin_new_auction',{},r=>{ if(r?.ok){soldOverlay.classList.remove('show');showToast('새 경매가 준비되었습니다.');} else showToast(r?.message||'처리 실패'); });
 }
+document.querySelectorAll('#endAuction').forEach(b=>b.addEventListener('click',closeAuction));
+document.querySelectorAll('#cancelAuction').forEach(b=>b.addEventListener('click',cancelAuction));
+document.querySelectorAll('#newAuction').forEach(b=>b.addEventListener('click',newAuction));
+document.querySelectorAll('#demoBid').forEach(b=>{b.style.display='none';});
+soldOverlay.addEventListener('click',()=>soldOverlay.classList.remove('show'));
 
-
-function resetForNewAuction(){
-  // 마지막 낙찰 화면/잠금 해제
-  soldOverlay.classList.remove('show');
-  countdown.classList.remove('show');
-  flash.classList.remove('show');
-  bidBattlePopup.classList.remove('show');
-  locked = false;
-
-  // 방장이 설정해 둔 시작가로 새 경매 시작
-  const configuredStart = Number(localStorage.getItem('baksan_start_price'));
-  const nextStart = Number.isFinite(configuredStart) && configuredStart >= 0
-    ? configuredStart
-    : 0;
-
-  currentPrice = nextStart;
-  currentLeader = '운영자 START';
-
-  priceEl.textContent = money(currentPrice);
-  leaderEl.textContent = currentLeader;
-  startPriceCurrent.textContent = money(currentPrice);
-  startPriceInput.value = currentPrice;
-
-  // 이전 경매 입찰 기록은 비움
-  logList.innerHTML = '';
-
-  // 참가자 보유금은 그대로 유지
-  renderAdminPlayers();
-  updateMyBalance();
-
-  // 제목은 다음 경매용으로 다시 입력하기 쉽도록 입력창 선택
-  slotTitleInput.select();
-  slotTitleInput.focus();
+const adminLoginTrigger=$('adminLoginTrigger'), adminLoginModal=$('adminLoginModal'), adminLoginClose=$('adminLoginClose'), adminPassword=$('adminPassword'), adminLoginButton=$('adminLoginButton'), adminLoginError=$('adminLoginError');
+function setAdminMode(on){
+  adminLoggedIn=!!on; document.body.classList.toggle('admin-mode',!!on); adminLoginTrigger.textContent=on?'ADMIN ON':'ADMIN'; adminLoginTrigger.classList.toggle('logged-in',!!on);
+  if(on){slotTitleInput.value=currentState.title||''; renderAdminPlayers();}
 }
-
-document.getElementById('newAuction').addEventListener('click', resetForNewAuction);
-
-
-const auctionUiVersion = 'v1.3 INDEX PREMIUM';
-if(localStorage.getItem('baksan_auction_ui_version') !== auctionUiVersion){
-  localStorage.setItem('baksan_start_price','0');
-  localStorage.setItem('baksan_auction_ui_version',auctionUiVersion);
-  currentPrice = 0;
-  priceEl.textContent = money(0);
-  startPriceCurrent.textContent = money(0);
-  startPriceInput.value = 0;
-}
-
-const saved = localStorage.getItem('baksan_nickname');
-if(saved) nickname.value = saved;
-renderMembers();
-
-
-const auctionStatusText = document.getElementById('auctionStatusText');
-function setAuctionStatusText(text){
-  if(auctionStatusText) auctionStatusText.textContent = text;
-}
-
-const liveClock = document.getElementById('liveClock');
-const liveDate = document.getElementById('liveDate');
-
-function updateLiveClock(){
-  const now = new Date();
-
-  const timeParts = new Intl.DateTimeFormat('ko-KR', {
-    timeZone: 'Asia/Seoul',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false
-  }).formatToParts(now);
-
-  const getPart = type => timeParts.find(p => p.type === type)?.value || '00';
-  liveClock.textContent = `${getPart('hour')}:${getPart('minute')}:${getPart('second')}`;
-
-  liveDate.textContent = new Intl.DateTimeFormat('ko-KR', {
-    timeZone: 'Asia/Seoul',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    weekday: 'short'
-  }).format(now);
-}
-
-updateLiveClock();
-
-// 정각 기준으로 최대한 정확하게 초가 바뀌도록 250ms마다 화면을 확인
-setInterval(updateLiveClock, 250);
-
-
-const adminLoginTrigger = document.getElementById('adminLoginTrigger');
-const adminLoginModal = document.getElementById('adminLoginModal');
-const adminLoginClose = document.getElementById('adminLoginClose');
-const adminPassword = document.getElementById('adminPassword');
-const adminLoginButton = document.getElementById('adminLoginButton');
-const adminLoginError = document.getElementById('adminLoginError');
-
 function openAdminLogin(){
-  if(document.body.classList.contains('admin-mode')){
-    document.body.classList.remove('admin-mode');
-    sessionStorage.removeItem('baksan_admin');
-    adminLoginTrigger.textContent = 'ADMIN';
-    adminLoginTrigger.classList.remove('logged-in');
-    return;
-  }
-  adminPassword.value = '';
-  adminLoginError.style.display = 'none';
-  adminLoginModal.classList.add('show');
-  setTimeout(()=>adminPassword.focus(),50);
+  if(isAdmin()){ socket.emit('admin_logout'); sessionStorage.removeItem('baksan_admin_password'); setAdminMode(false); return; }
+  adminPassword.value=''; adminLoginError.style.display='none'; adminLoginModal.classList.add('show'); setTimeout(()=>adminPassword.focus(),50);
 }
-function closeAdminLogin(){
-  adminLoginModal.classList.remove('show');
+function closeAdminLogin(){adminLoginModal.classList.remove('show');}
+function loginAdmin(password,silent=false){
+  socket.emit('admin_login',{password},r=>{
+    if(r?.ok){ sessionStorage.setItem('baksan_admin_password',password); setAdminMode(true); closeAdminLogin(); if(!silent)showToast('방장 권한이 활성화되었습니다.'); }
+    else {sessionStorage.removeItem('baksan_admin_password');setAdminMode(false);if(!silent){adminLoginError.textContent=r?.message||'비밀번호가 올바르지 않습니다.';adminLoginError.style.display='block';adminPassword.select();}}
+  });
 }
-function tryAdminLogin(){
-  if(adminPassword.value === '9981'){
-    document.body.classList.add('admin-mode');
-    sessionStorage.setItem('baksan_admin','1');
-    adminLoginTrigger.textContent = 'ADMIN ON';
-    adminLoginTrigger.classList.add('logged-in');
-    closeAdminLogin();
-  }else{
-    adminLoginError.style.display = 'block';
-    adminPassword.select();
-  }
-}
-adminLoginTrigger.addEventListener('click', openAdminLogin);
-adminLoginClose.addEventListener('click', closeAdminLogin);
-adminLoginButton.addEventListener('click', tryAdminLogin);
-adminPassword.addEventListener('keydown',e=>{ if(e.key==='Enter') tryAdminLogin(); });
-adminLoginModal.addEventListener('click',e=>{ if(e.target===adminLoginModal) closeAdminLogin(); });
+adminLoginTrigger.addEventListener('click',openAdminLogin); adminLoginClose.addEventListener('click',closeAdminLogin); adminLoginButton.addEventListener('click',()=>loginAdmin(adminPassword.value)); adminPassword.addEventListener('keydown',e=>{if(e.key==='Enter')loginAdmin(adminPassword.value)}); adminLoginModal.addEventListener('click',e=>{if(e.target===adminLoginModal)closeAdminLogin()});
 
-if(sessionStorage.getItem('baksan_admin') === '1'){
-  document.body.classList.add('admin-mode');
-  adminLoginTrigger.textContent = 'ADMIN ON';
-  adminLoginTrigger.classList.add('logged-in');
+const liveClock=$('liveClock'), liveDate=$('liveDate');
+function updateLiveClock(){
+  const now=new Date(); const tp=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).formatToParts(now); const g=t=>tp.find(p=>p.type===t)?.value||'00';
+  liveClock.textContent=`${g('hour')}:${g('minute')}:${g('second')}`; liveDate.textContent=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'}).format(now);
 }
-
+updateLiveClock(); setInterval(updateLiveClock,250);
+renderMembers(); renderState(currentState);
 </script>
 </body>
 </html>
