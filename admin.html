@@ -5,46 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>바카라산악회 ADMIN CONTROL</title>
 <style>
-:root{--bg:#08080b;--panel:#111117;--line:rgba(255,255,255,.09);--gold:#f0cf7c;--green:#67e3a5;--red:#ff6f8d}
+:root{
+  --bg:#07080b;--panel:#11131a;--panel2:#171a22;--line:rgba(255,255,255,.08);
+  --gold:#f1d180;--gold2:#b7832d;--green:#68e7a7;--red:#ff7895;--muted:#858794;
+}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at 15% 10%,rgba(240,207,124,.08),transparent 26%),#08080b;color:#fff;font-family:Arial,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
-body{padding:12px}button,input{font:inherit}.wrap{width:min(1500px,100%);margin:auto}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 17px;border:1px solid var(--line);border-radius:18px;background:#0f0f14}
-.brand b{display:block;font-size:23px}.brand span{font-size:10px;color:#a58c58;letter-spacing:.17em;font-weight:900}
-.live{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#0d1b14;color:#c7ffe0;font-size:11px;font-weight:1000}
-.live i,.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
-.grid{display:grid;grid-template-columns:280px minmax(0,1fr) 370px;gap:12px;margin-top:12px}
-.panel{border:1px solid var(--line);border-radius:20px;background:#0f0f14;overflow:hidden}
-.panel-title{padding:14px 16px;border-bottom:1px solid var(--line);font-size:13px;font-weight:1000;color:#eadcb5}
-.players{padding:10px;max-height:720px;overflow:auto}.player{padding:11px;border:1px solid rgba(255,255,255,.06);border-radius:13px;margin-bottom:7px;background:#0d0d12;cursor:pointer}.player.active{border-color:var(--gold)}
-.player-top{display:flex;justify-content:space-between;align-items:center}.player-name{font-size:14px;font-weight:1000}.player-balance{margin-top:6px;color:var(--gold);font-size:15px;font-weight:1000}
-.center{padding:14px}.hero{padding:22px;border-radius:20px;border:1px solid rgba(240,207,124,.16);background:linear-gradient(145deg,#181411,#0a0a0d 75%)}
-.kicker{font-size:10px;color:#a98d55;font-weight:1000;letter-spacing:.18em}.auction-title{margin-top:7px;font-size:34px;font-weight:1000}
-.statusline{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.statuspill{padding:7px 10px;border-radius:999px;background:#0c0c10;border:1px solid rgba(255,255,255,.07);font-size:11px;color:#bbb}
-.big-price-label{margin-top:17px;font-size:10px;color:#888;font-weight:900}.big-price{font-size:48px;font-weight:1000;color:#fff0bb;margin-top:3px}
-.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.card{padding:13px;border-radius:14px;background:#0d0d12;border:1px solid rgba(255,255,255,.06)}.card span{display:block;color:#7f7f89;font-size:10px;font-weight:900}.card b{display:block;margin-top:5px;font-size:16px}
-.ledger{margin-top:12px;border:1px solid var(--line);border-radius:18px;overflow:hidden}.ledger-head{padding:12px 14px;font-size:12px;font-weight:1000;background:#0c0c10}.ledger-list{max-height:360px;overflow:auto}
-.tx{display:grid;grid-template-columns:82px 1fr auto;gap:10px;padding:11px 14px;border-top:1px solid rgba(255,255,255,.055)}.tx-time{font-size:10px;color:#777}.tx-desc{font-size:12px;font-weight:800}.tx-amount{font-size:13px;font-weight:1000;color:var(--green)}
-.controls{padding:12px}.box{padding:13px;border-radius:14px;background:#0c0c10;border:1px solid rgba(255,255,255,.07)}.box span{font-size:10px;color:#85858f}.box b{display:block;margin-top:4px;font-size:18px}
-.section-title{margin:13px 0 7px;font-size:11px;color:#d8c18d;font-weight:1000}.row{display:flex;gap:7px;margin-top:7px}.row input{flex:1;min-width:0;height:44px;border-radius:11px;border:1px solid rgba(255,255,255,.08);background:#09090c;color:#fff;padding:0 11px;font-weight:900}.row button{width:84px;border:0;border-radius:11px;background:linear-gradient(135deg,#f4dc92,#b67e2c);font-weight:1000}
-.money-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.money-btn{height:44px;border-radius:11px;border:1px solid rgba(240,207,124,.18);background:#2a210e;color:#ffe8a7;font-weight:1000}
-.red-btn{width:100%;height:44px;margin-top:7px;border-radius:11px;border:1px solid rgba(255,111,141,.18);background:#36121b;color:#ffb6c5;font-weight:1000}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.action-btn{height:44px;border-radius:11px;border:1px solid rgba(255,255,255,.08);background:#15151b;color:#eee;font-weight:1000}.good{background:#123422!important}.warn{background:#3d2b0f!important}.bad{background:#36121b!important}
-.empty{padding:24px;text-align:center;color:#777}.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,25px);opacity:0;background:#fff;color:#111;padding:11px 16px;border-radius:999px;font-weight:1000;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
-.login{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88);display:grid;place-items:center;padding:20px}.login.hidden{display:none}.login-card{width:min(92vw,380px);padding:26px;border-radius:24px;border:1px solid rgba(240,207,124,.25);background:#111117;text-align:center}.login-card input{width:100%;height:50px;margin-top:10px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#08080b;color:#fff;text-align:center;font-size:20px}.login-card button{width:100%;height:50px;margin-top:10px;border:0;border-radius:12px;background:linear-gradient(135deg,#f4dc92,#b67e2c);font-weight:1000}
-@media(max-width:1050px){.grid{grid-template-columns:1fr}.players{max-height:250px}.summary{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){body{padding:8px}.auction-title{font-size:28px}.big-price{font-size:38px}.summary{grid-template-columns:1fr 1fr}}
+html,body{margin:0;min-height:100%;background:
+  radial-gradient(circle at 18% 10%,rgba(241,209,128,.08),transparent 25%),
+  radial-gradient(circle at 82% 14%,rgba(104,231,167,.05),transparent 20%),
+  linear-gradient(#07080b,#0a0b0f 55%,#07080b);
+  color:#fff;font-family:Arial,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+body{padding:12px}
+button,input{font:inherit}
+.wrap{width:min(1540px,100%);margin:auto}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:15px 18px;border:1px solid var(--line);border-radius:20px;background:rgba(15,17,23,.94);
+  box-shadow:0 16px 50px rgba(0,0,0,.28)
+}
+.brand b{display:block;font-size:24px;letter-spacing:-.04em}
+.brand span{font-size:9px;color:#a58e59;letter-spacing:.18em;font-weight:1000}
+.top-status{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.pill{display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:#0d1310;border:1px solid rgba(104,231,167,.14);color:#c7ffe2;font-size:10px;font-weight:1000}
+.pill.gold{background:#171209;border-color:rgba(241,209,128,.15);color:#ffe5a2}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.dashboard{display:grid;grid-template-columns:290px minmax(0,1fr) 390px;gap:12px;margin-top:12px}
+.panel{border:1px solid var(--line);border-radius:20px;background:rgba(16,18,24,.96);overflow:hidden}
+.panel-title{padding:14px 16px;border-bottom:1px solid var(--line);font-size:13px;font-weight:1000;color:#ecdfb9;background:linear-gradient(90deg,rgba(241,209,128,.045),transparent)}
+.players{padding:10px;max-height:760px;overflow:auto}
+.empty{padding:26px 12px;text-align:center;color:#747682;font-size:12px}
+.player{padding:11px;border:1px solid rgba(255,255,255,.055);border-radius:14px;margin-bottom:7px;background:#0d0f14;cursor:pointer;transition:.16s}
+.player:hover{border-color:rgba(241,209,128,.22)}
+.player.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(241,209,128,.07)}
+.player-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.player-name{font-size:14px;font-weight:1000}
+.online{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.player-money{margin-top:6px;font-size:15px;font-weight:1000;color:var(--gold)}
+.player-sub{margin-top:3px;font-size:9px;color:#777a86}
+.center{padding:14px}
+.hero{
+  padding:22px;border-radius:20px;border:1px solid rgba(241,209,128,.15);
+  background:radial-gradient(circle at 50% 0%,rgba(241,209,128,.1),transparent 44%),linear-gradient(145deg,#19150f,#0c0d12 72%);
+}
+.hero-kicker{font-size:9px;color:#a88f59;font-weight:1000;letter-spacing:.2em}
+.hero-title{margin-top:6px;font-size:34px;font-weight:1000;letter-spacing:-.05em}
+.state-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.state-pill{padding:7px 10px;border-radius:999px;background:#0d0f14;border:1px solid rgba(255,255,255,.06);font-size:10px;color:#bbb}
+.price-label{margin-top:18px;font-size:9px;color:#7f818d;font-weight:1000;letter-spacing:.18em}
+.current-price{font-size:52px;font-weight:1000;color:#fff0bc;margin-top:3px;letter-spacing:-.05em}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.stat{padding:13px;border-radius:14px;background:#0d0f14;border:1px solid rgba(255,255,255,.055)}
+.stat span{display:block;color:#7a7d88;font-size:9px;font-weight:1000}.stat b{display:block;margin-top:5px;font-size:17px}
+.ledger{margin-top:12px;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.ledger-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#0c0e12;font-size:12px;font-weight:1000}
+.ledger-list{max-height:360px;overflow:auto}
+.tx{display:grid;grid-template-columns:82px 1fr auto;gap:10px;align-items:center;padding:11px 14px;border-top:1px solid rgba(255,255,255,.05)}
+.tx-time{font-size:9px;color:#70727d}.tx-main{font-size:12px;font-weight:900}.tx-sub{font-size:9px;color:#777a84;margin-top:2px}.tx-amount{font-size:13px;font-weight:1000;color:var(--gold)}
+.controls{padding:12px}
+.selected-box{padding:13px;border-radius:14px;background:#0d0f14;border:1px solid rgba(255,255,255,.06)}
+.selected-box span{font-size:9px;color:#7d808a}.selected-box b{display:block;margin-top:4px;font-size:18px}
+.section-title{margin:13px 0 7px;font-size:10px;color:#d7c18a;font-weight:1000}
+.row{display:flex;gap:7px}.row input{flex:1;min-width:0;height:44px;border-radius:11px;border:1px solid rgba(255,255,255,.07);background:#090a0e;color:#fff;padding:0 11px;font-weight:900;outline:none}
+.row button{width:86px;border:0;border-radius:11px;background:linear-gradient(135deg,#f4dc92,#b67e2c);color:#241600;font-weight:1000;cursor:pointer}
+.money-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.money-btn{height:44px;border-radius:11px;border:1px solid rgba(241,209,128,.16);background:linear-gradient(135deg,#342a13,#181107);color:#ffe7a5;font-weight:1000;cursor:pointer}
+.recover-all{width:100%;height:44px;margin-top:7px;border-radius:11px;border:1px solid rgba(255,120,149,.16);background:linear-gradient(135deg,#3a1620,#190b10);color:#ffb9c8;font-weight:1000;cursor:pointer}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.action-btn{height:44px;border-radius:11px;border:1px solid rgba(255,255,255,.07);background:#151820;color:#eee;font-weight:1000;cursor:pointer}
+.action-btn.good{background:linear-gradient(135deg,#163a29,#0c1c14);color:#c4ffdc}
+.action-btn.warn{background:linear-gradient(135deg,#3d2d12,#1b1309);color:#ffe7a7}
+.action-btn.bad{background:linear-gradient(135deg,#3d1720,#1a0b10);color:#ffb9c8}
+.info-box{margin-top:12px;padding:13px;border-radius:14px;background:#0c0e12;border:1px solid rgba(104,231,167,.10)}
+.info-box span{font-size:9px;color:#77827b}.info-box b{display:block;margin-top:4px;font-size:18px;color:#c9ffe0}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,25px);opacity:0;pointer-events:none;background:#fff;color:#111;padding:11px 16px;border-radius:999px;font-weight:1000;transition:.2s;z-index:200}.toast.show{opacity:1;transform:translate(-50%,0)}
+.login{position:fixed;inset:0;z-index:300;display:grid;place-items:center;background:rgba(0,0,0,.88);padding:20px}.login.hidden{display:none}
+.login-card{width:min(92vw,390px);padding:28px;border-radius:25px;text-align:center;background:linear-gradient(160deg,#17120e,#0b0c11 72%);border:1px solid rgba(241,209,128,.23);box-shadow:0 30px 100px rgba(0,0,0,.55)}
+.login-card .crown{font-size:34px;color:var(--gold)}.login-card h2{margin:8px 0 2px;color:#ffe5a0}.login-card p{margin:0;color:#777;font-size:11px}.login-card input{width:100%;height:52px;margin-top:17px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:#090a0e;color:#fff;text-align:center;font-size:21px;letter-spacing:.25em}.login-card button{width:100%;height:50px;margin-top:9px;border:0;border-radius:12px;background:linear-gradient(135deg,#f4dc92,#b67e2c);font-weight:1000}
+@media(max-width:1050px){.dashboard{grid-template-columns:1fr}.players{max-height:260px}.summary{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){body{padding:8px}.hero-title{font-size:28px}.current-price{font-size:40px}.summary{grid-template-columns:1fr 1fr}.tx{grid-template-columns:66px 1fr auto}}
 </style>
 </head>
 <body>
-<div class="login" id="login"><div class="login-card"><h2>♛ ADMIN ACCESS</h2><div>방장 비밀번호</div><input id="password" type="password" inputmode="numeric" maxlength="4" placeholder="4자리"><button id="loginBtn">방장 접속</button></div></div>
+<div class="login" id="login">
+  <div class="login-card">
+    <div class="crown">♛</div>
+    <h2>ADMIN ACCESS</h2>
+    <p>바카라산악회 슬롯경매 관리자 전용</p>
+    <input id="password" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+    <button id="loginBtn">방장 접속</button>
+  </div>
+</div>
 
 <div class="wrap">
   <div class="topbar">
-    <div class="brand"><b>바카라산악회 ADMIN CONTROL</b><span>LIVE SLOT AUCTION MASTER ROOM</span></div>
-    <div class="live"><i></i> SERVER LINKED</div>
+    <div class="brand">
+      <b>바카라산악회 ADMIN CONTROL</b>
+      <span>LIVE AUCTION OPERATIONS · TEST POINT MODE</span>
+    </div>
+    <div class="top-status">
+      <div class="pill"><i></i> SERVER LINKED</div>
+      <div class="pill gold" id="clock">--:--:--</div>
+    </div>
   </div>
 
-  <div class="grid">
+  <div class="dashboard">
     <aside class="panel">
       <div class="panel-title">🟢 실제 접속 참가자</div>
       <div class="players" id="playerList"></div>
@@ -53,39 +116,52 @@ body{padding:12px}button,input{font:inherit}.wrap{width:min(1500px,100%);margin:
     <main class="panel">
       <div class="center">
         <section class="hero">
-          <div class="kicker">CURRENT AUCTION</div>
-          <div class="auction-title" id="auctionTitle">오늘의 메인 슬롯</div>
-          <div class="statusline">
-            <div class="statuspill">상태 · <b id="auctionStatus">준비중</b></div>
-            <div class="statuspill">최고 입찰자 · <b id="leaderName">없음</b></div>
+          <div class="hero-kicker">CURRENT AUCTION</div>
+          <div class="hero-title" id="auctionTitle">오늘의 메인 슬롯</div>
+          <div class="state-row">
+            <div class="state-pill">상태 · <b id="auctionStatus">준비중</b></div>
+            <div class="state-pill">최고 입찰자 · <b id="leaderName">없음</b></div>
+            <div class="state-pill">접속자 · <b id="onlineCount">0명</b></div>
           </div>
-          <div class="big-price-label">CURRENT HIGHEST BID</div>
-          <div class="big-price" id="highestBid">0 P</div>
+          <div class="price-label">CURRENT HIGHEST BID</div>
+          <div class="current-price" id="highestBid">0 P</div>
           <div class="summary">
-            <div class="card"><span>선택 참가자 잔액</span><b id="selectedBalance">0 P</b></div>
-            <div class="card"><span>보류금</span><b id="heldBalance">0 P</b></div>
-            <div class="card"><span>실제 접속자</span><b id="onlineCount">0명</b></div>
-            <div class="card"><span>시작가</span><b id="startPriceView">0 P</b></div>
+            <div class="stat"><span>선택 참가자 보유</span><b id="selectedBalance">0 P</b></div>
+            <div class="stat"><span>입찰 보류금</span><b id="heldBalance">0 P</b></div>
+            <div class="stat"><span>사용 가능</span><b id="availableBalance">0 P</b></div>
+            <div class="stat"><span>시작가</span><b id="startPriceView">0 P</b></div>
           </div>
         </section>
 
         <section class="ledger">
-          <div class="ledger-head">📒 실시간 입찰 원장</div>
+          <div class="ledger-head">
+            <span>📒 실시간 경매 원장</span>
+            <span id="ledgerCount">0건</span>
+          </div>
           <div class="ledger-list" id="ledgerList"></div>
         </section>
       </div>
     </main>
 
     <aside class="panel">
-      <div class="panel-title">👑 관리자 조작</div>
+      <div class="panel-title">👑 관리자 운영실</div>
       <div class="controls">
-        <div class="box"><span>선택 참가자</span><b id="selectedName">없음</b></div>
+        <div class="selected-box">
+          <span>선택 참가자</span>
+          <b id="selectedName">없음</b>
+        </div>
 
         <div class="section-title">경매 제목</div>
-        <div class="row"><input id="titleInput" placeholder="경매 제목 입력"><button id="applyTitle">적용</button></div>
+        <div class="row">
+          <input id="titleInput" placeholder="오늘의 메인 슬롯 제목">
+          <button id="applyTitle">적용</button>
+        </div>
 
-        <div class="section-title">시작가</div>
-        <div class="row"><input id="startPriceInput" type="number" min="0" step="10000" value="0"><button id="applyStartPrice">설정</button></div>
+        <div class="section-title">경매 시작가</div>
+        <div class="row">
+          <input id="startPriceInput" type="number" min="0" step="10000" value="0">
+          <button id="applyStartPrice">설정</button>
+        </div>
 
         <div class="section-title">포인트 지급</div>
         <div class="money-grid">
@@ -94,12 +170,17 @@ body{padding:12px}button,input{font:inherit}.wrap{width:min(1500px,100%);margin:
           <button class="money-btn" data-give="300000">+30만</button>
           <button class="money-btn" data-give="500000">+50만</button>
         </div>
-
-        <div class="row"><input id="customGive" type="number" min="0" step="10000" placeholder="직접 지급"><button id="giveCustom">지급</button></div>
+        <div class="row" style="margin-top:7px">
+          <input id="customGive" type="number" min="0" step="10000" placeholder="직접 지급">
+          <button id="giveCustom">지급</button>
+        </div>
 
         <div class="section-title">포인트 회수</div>
-        <div class="row"><input id="customRecover" type="number" min="0" step="10000" placeholder="직접 회수"><button id="recoverCustom">회수</button></div>
-        <button class="red-btn" id="recoverAll">전액 회수</button>
+        <div class="row">
+          <input id="customRecover" type="number" min="0" step="10000" placeholder="직접 회수">
+          <button id="recoverCustom">회수</button>
+        </div>
+        <button class="recover-all" id="recoverAll">선택 참가자 전액 회수</button>
 
         <div class="section-title">경매 진행</div>
         <div class="actions">
@@ -107,6 +188,11 @@ body{padding:12px}button,input{font:inherit}.wrap{width:min(1500px,100%);margin:
           <button class="action-btn warn" id="closeAuction">낙찰 확정</button>
           <button class="action-btn bad" id="failedAuction">유찰 / 환불</button>
           <button class="action-btn" id="newAuction">새 경매 준비</button>
+        </div>
+
+        <div class="info-box">
+          <span>현재 연결 상태</span>
+          <b id="connectionState">연결 중...</b>
         </div>
       </div>
     </aside>
@@ -130,34 +216,34 @@ const fmt=n=>Math.max(0,Number(n)||0).toLocaleString('ko-KR')+' P';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 function toast(msg){
-  const t=$('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  clearTimeout(window.__tt);
-  window.__tt=setTimeout(()=>t.classList.remove('show'),1500);
+  const t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),1600);
 }
-
 function statusText(s){
-  return ({ready:'준비중',live:'진행중',sold:'낙찰완료'})[s]||s;
+  if(s==='sold') return '낙찰 완료';
+  if(s==='live') return '진행중';
+  return '준비중';
 }
-function selected(){
-  return participants.find(p=>p.name===selectedName);
-}
+function selected(){ return participants.find(p=>p.name===selectedName); }
+
 function render(){
   $('playerList').innerHTML=participants.length
-    ? participants.map(p=>`
-      <div class="player ${p.name===selectedName?'active':''}" data-name="${esc(p.name)}">
-        <div class="player-top"><div class="player-name">${esc(p.name)}</div><span class="dot"></span></div>
-        <div class="player-balance">${fmt(balances[p.name]??p.balance??0)}</div>
-      </div>
-    `).join('')
+    ? participants.map(p=>{
+        const total=balances[p.name]??p.balance??0;
+        const held=holds[p.name]??p.held??0;
+        return `<div class="player ${p.name===selectedName?'active':''}" data-name="${esc(p.name)}">
+          <div class="player-top"><div class="player-name">${esc(p.name)}</div><span class="online"></span></div>
+          <div class="player-money">${fmt(total)}</div>
+          <div class="player-sub">보류 ${fmt(held)} · 사용가능 ${fmt(Math.max(0,total-held))}</div>
+        </div>`;
+      }).join('')
     : '<div class="empty">현재 접속자가 없습니다.</div>';
 
   document.querySelectorAll('.player').forEach(el=>{
     el.onclick=()=>{selectedName=el.dataset.name;render();}
   });
 
-  if(selectedName&&!participants.some(p=>p.name===selectedName)) selectedName=null;
+  if(selectedName && !participants.some(p=>p.name===selectedName)) selectedName=null;
 
   const p=selected();
   const total=p?(balances[p.name]??p.balance??0):0;
@@ -166,6 +252,7 @@ function render(){
   $('selectedName').textContent=selectedName||'없음';
   $('selectedBalance').textContent=fmt(total);
   $('heldBalance').textContent=fmt(held);
+  $('availableBalance').textContent=fmt(Math.max(0,total-held));
   $('onlineCount').textContent=participants.length+'명';
   $('auctionTitle').textContent=state.title||'오늘의 메인 슬롯';
   $('auctionStatus').textContent=statusText(state.status);
@@ -174,38 +261,42 @@ function render(){
   $('startPriceView').textContent=fmt(state.startPrice);
   $('titleInput').value=state.title||'';
   $('startPriceInput').value=state.startPrice||0;
+  $('ledgerCount').textContent=(state.logs||[]).length+'건';
 
   $('ledgerList').innerHTML=(state.logs||[]).length
     ? state.logs.map(x=>`
       <div class="tx">
         <div class="tx-time">${new Date(x.ts).toLocaleTimeString('ko-KR',{hour12:false})}</div>
-        <div class="tx-desc">${esc(x.name)} 입찰</div>
-        <div class="tx-amount">+${fmt(x.inc)} → ${fmt(x.total)}</div>
+        <div>
+          <div class="tx-main">${esc(x.name)} 입찰</div>
+          <div class="tx-sub">증가 ${fmt(x.inc)}</div>
+        </div>
+        <div class="tx-amount">${fmt(x.total)}</div>
       </div>
     `).join('')
-    : '<div class="empty">입찰 기록이 없습니다.</div>';
+    : '<div class="empty">아직 입찰 기록이 없습니다.</div>';
 }
 
-function login(){
-  socket.emit('admin_login',{password:$('password').value},result=>{
-    if(!result?.ok) return toast(result?.message||'로그인 실패');
-    sessionStorage.setItem('admin_pw',$('password').value);
+function adminLogin(){
+  socket.emit('admin_login',{password:$('password').value},r=>{
+    if(!r?.ok) return toast(r?.message||'로그인 실패');
+    sessionStorage.setItem('sanak_admin_pw',$('password').value);
     $('login').classList.add('hidden');
-    toast('방장 접속 완료');
+    $('connectionState').textContent='실시간 연결 ON';
+    toast('관리자 접속 완료');
   });
 }
-
-$('loginBtn').onclick=login;
-$('password').onkeydown=e=>{if(e.key==='Enter')login();};
+$('loginBtn').onclick=adminLogin;
+$('password').onkeydown=e=>{if(e.key==='Enter')adminLogin()};
 
 socket.on('connect',()=>{
-  const pw=sessionStorage.getItem('admin_pw');
-  if(pw){
-    $('password').value=pw;
-    login();
-  }
+  $('connectionState').textContent='서버 연결됨';
+  const saved=sessionStorage.getItem('sanak_admin_pw');
+  if(saved){$('password').value=saved;adminLogin();}
 });
-
+socket.on('disconnect',()=>{
+  $('connectionState').textContent='연결 끊김';
+});
 socket.on('participants',list=>{
   participants=Array.isArray(list)?list:[];
   render();
@@ -223,7 +314,7 @@ socket.on('auction_state',data=>{
 
 $('applyTitle').onclick=()=>{
   socket.emit('admin_set_title',{title:$('titleInput').value},r=>{
-    toast(r?.ok?'제목 적용 완료':r?.message||'실패');
+    toast(r?.ok?'경매 제목 적용 완료':r?.message||'실패');
   });
 };
 $('applyStartPrice').onclick=()=>{
@@ -233,19 +324,19 @@ $('applyStartPrice').onclick=()=>{
 };
 
 function setBalance(target){
-  if(!selectedName) return toast('참가자를 선택해주세요.');
+  if(!selectedName)return toast('참가자를 먼저 선택해주세요.');
   socket.emit('admin_set_balance',{
     name:selectedName,
     amount:Math.max(0,Math.floor(target))
   },r=>{
-    toast(r?.ok?'잔액 반영 완료':r?.message||'실패');
+    toast(r?.ok?'포인트 반영 완료':r?.message||'실패');
   });
 }
 
 document.querySelectorAll('[data-give]').forEach(btn=>{
   btn.onclick=()=>{
     const p=selected();
-    if(!p) return toast('참가자를 선택해주세요.');
+    if(!p)return toast('참가자를 먼저 선택해주세요.');
     const current=balances[p.name]??p.balance??0;
     setBalance(current+Number(btn.dataset.give));
   };
@@ -253,7 +344,7 @@ document.querySelectorAll('[data-give]').forEach(btn=>{
 
 $('giveCustom').onclick=()=>{
   const p=selected();
-  if(!p) return toast('참가자를 선택해주세요.');
+  if(!p)return toast('참가자를 먼저 선택해주세요.');
   const amount=Math.max(0,Number($('customGive').value||0));
   const current=balances[p.name]??p.balance??0;
   setBalance(current+amount);
@@ -262,7 +353,7 @@ $('giveCustom').onclick=()=>{
 
 $('recoverCustom').onclick=()=>{
   const p=selected();
-  if(!p) return toast('참가자를 선택해주세요.');
+  if(!p)return toast('참가자를 먼저 선택해주세요.');
   const amount=Math.max(0,Number($('customRecover').value||0));
   const current=balances[p.name]??p.balance??0;
   setBalance(Math.max(0,current-amount));
@@ -271,26 +362,22 @@ $('recoverCustom').onclick=()=>{
 
 $('recoverAll').onclick=()=>setBalance(0);
 
-// 중요: 기존 server.js를 그대로 쓰기 위해 '경매 시작'은
-// 서버에 이미 존재하는 admin_new_auction 이벤트를 사용합니다.
-// 기존 서버는 ready 상태에서도 참가자의 place_bid를 허용하므로
-// 별도 server.js 교체가 필요 없습니다.
 $('startAuction').onclick=()=>{
   socket.emit('admin_new_auction',{},r=>{
-    toast(r?.ok?'경매 시작 준비 완료! 참가자가 입찰할 수 있습니다.':r?.message||'시작 실패');
+    toast(r?.ok?'경매 시작 준비 완료 · 참가자 입찰 가능':r?.message||'시작 실패');
   });
 };
 
 $('closeAuction').onclick=()=>{
   socket.emit('admin_close_auction',{},r=>{
-    if(!r?.ok) return toast(r?.message||'마감 실패');
-    toast(r.sold ? `${r.winner} 낙찰 ${fmt(r.price)}` : '유찰 처리');
+    if(!r?.ok)return toast(r?.message||'낙찰 처리 실패');
+    toast(r.sold?`${r.winner} 낙찰 확정 · ${fmt(r.price)}`:'입찰자 없음 · 유찰');
   });
 };
 
 $('failedAuction').onclick=()=>{
   socket.emit('admin_cancel_auction',{},r=>{
-    toast(r?.ok?'유찰 / 환불 완료':r?.message||'실패');
+    toast(r?.ok?'유찰 처리 · 보류금 반환 완료':r?.message||'실패');
   });
 };
 
@@ -299,6 +386,10 @@ $('newAuction').onclick=()=>{
     toast(r?.ok?'새 경매 준비 완료':r?.message||'실패');
   });
 };
+
+setInterval(()=>{
+  $('clock').textContent=new Date().toLocaleTimeString('ko-KR',{hour12:false});
+},500);
 
 render();
 </script>
