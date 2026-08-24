@@ -94,6 +94,7 @@ body{padding:12px}button,input{font:inherit}.wrap{width:min(1500px,100%);margin:
           <button class="money-btn" data-give="300000">+30만</button>
           <button class="money-btn" data-give="500000">+50만</button>
         </div>
+
         <div class="row"><input id="customGive" type="number" min="0" step="10000" placeholder="직접 지급"><button id="giveCustom">지급</button></div>
 
         <div class="section-title">포인트 회수</div>
@@ -135,6 +136,7 @@ function toast(msg){
   clearTimeout(window.__tt);
   window.__tt=setTimeout(()=>t.classList.remove('show'),1500);
 }
+
 function statusText(s){
   return ({ready:'준비중',live:'진행중',sold:'낙찰완료'})[s]||s;
 }
@@ -155,7 +157,7 @@ function render(){
     el.onclick=()=>{selectedName=el.dataset.name;render();}
   });
 
-  if(selectedName && !participants.some(p=>p.name===selectedName)) selectedName=null;
+  if(selectedName&&!participants.some(p=>p.name===selectedName)) selectedName=null;
 
   const p=selected();
   const total=p?(balances[p.name]??p.balance??0):0;
@@ -203,6 +205,7 @@ socket.on('connect',()=>{
     login();
   }
 });
+
 socket.on('participants',list=>{
   participants=Array.isArray(list)?list:[];
   render();
@@ -268,9 +271,13 @@ $('recoverCustom').onclick=()=>{
 
 $('recoverAll').onclick=()=>setBalance(0);
 
+// 중요: 기존 server.js를 그대로 쓰기 위해 '경매 시작'은
+// 서버에 이미 존재하는 admin_new_auction 이벤트를 사용합니다.
+// 기존 서버는 ready 상태에서도 참가자의 place_bid를 허용하므로
+// 별도 server.js 교체가 필요 없습니다.
 $('startAuction').onclick=()=>{
-  socket.emit('admin_start_auction',{},r=>{
-    toast(r?.ok?'경매 시작!':r?.message||'시작 실패');
+  socket.emit('admin_new_auction',{},r=>{
+    toast(r?.ok?'경매 시작 준비 완료! 참가자가 입찰할 수 있습니다.':r?.message||'시작 실패');
   });
 };
 
