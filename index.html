@@ -76,8 +76,8 @@ button{-webkit-tap-highlight-color:transparent}
 .auction-hero{position:relative;overflow:hidden;border-radius:22px;padding:18px;min-height:300px;border:1px solid rgba(247,213,138,.28);background:radial-gradient(circle at 50% 0%,rgba(247,213,138,.16),transparent 38%),radial-gradient(circle at 10% 100%,rgba(121,25,52,.18),transparent 35%),linear-gradient(145deg,#171113,#08080a 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 24px 70px rgba(0,0,0,.38)}
 .hero-top{display:flex;justify-content:space-between;align-items:center}
 .round-badge,.vip-badge{padding:7px 11px;border-radius:999px;color:#ffe5a5;font-size:10px;font-weight:1000;letter-spacing:.14em;border:1px solid rgba(247,213,138,.22);background:rgba(247,213,138,.06)}
-.title-board{min-height:170px;margin-top:16px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 18px;text-align:center;background:radial-gradient(circle at 50% 20%,rgba(255,224,130,.14),transparent 50%),linear-gradient(180deg,#120f10,#080809);border:1px solid rgba(255,214,107,.28);box-shadow:inset 0 0 38px rgba(255,214,107,.05),0 10px 28px rgba(0,0,0,.34)}
-.selected-slot-image{display:none;width:min(420px,88%);max-height:310px;object-fit:contain;border-radius:18px;margin:0 auto 14px;border:1px solid rgba(255,214,107,.28);box-shadow:0 14px 45px rgba(0,0,0,.48)}.selected-slot-image.show{display:block}.title-kicker{margin-bottom:10px;color:#caa85b;font-size:11px;font-weight:1000;letter-spacing:.22em}
+.selected-slot-image{display:none;width:min(350px,76%);aspect-ratio:1/1;object-fit:cover;border-radius:18px;margin:0 auto 12px;border:1px solid rgba(255,214,107,.28);box-shadow:0 12px 35px rgba(0,0,0,.42)}.selected-slot-image.show{display:block}.title-board{min-height:170px;margin-top:16px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 18px;text-align:center;background:radial-gradient(circle at 50% 20%,rgba(255,224,130,.14),transparent 50%),linear-gradient(180deg,#120f10,#080809);border:1px solid rgba(255,214,107,.28);box-shadow:inset 0 0 38px rgba(255,214,107,.05),0 10px 28px rgba(0,0,0,.34)}
+.title-kicker{margin-bottom:10px;color:#caa85b;font-size:11px;font-weight:1000;letter-spacing:.22em}
 .item-name{margin:0;width:100%;font-size:clamp(32px,6vw,62px);line-height:1.08;font-weight:1000;letter-spacing:-.055em;color:#fff7df;text-shadow:0 0 14px rgba(255,214,107,.18),0 3px 8px rgba(0,0,0,.75);overflow-wrap:anywhere}
 .price-card{text-align:center;padding:16px 10px 4px}
 .price-label{font-size:11px;color:#aaa;font-weight:900;letter-spacing:.12em}
@@ -286,9 +286,16 @@ function render(){
     auctionState.title && auctionState.title !== '오늘의 메인 슬롯'
       ? auctionState.title
       : '현재 경매 준비중';
-
-  const selectedSlotImage=$('selectedSlotImage');
-  if(auctionState.slot && auctionState.slot.image){selectedSlotImage.src=auctionState.slot.image;selectedSlotImage.classList.add('show')}else{selectedSlotImage.removeAttribute('src');selectedSlotImage.classList.remove('show')}
+  const slotImg = $('selectedSlotImage');
+  if(slotImg){
+    if(auctionState.slot && auctionState.slot.image){
+      slotImg.src = auctionState.slot.image;
+      slotImg.classList.add('show');
+    }else{
+      slotImg.removeAttribute('src');
+      slotImg.classList.remove('show');
+    }
+  }
 
   $('currentPrice').textContent = money(auctionState.currentPrice || 0);
   $('leader').textContent = '최고 입찰자 · ' + (auctionState.leader || '없음');
