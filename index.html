@@ -134,6 +134,10 @@ button{-webkit-tap-highlight-color:transparent}
  .bid-grid{grid-template-columns:repeat(2,1fr)}
  .live-clock{display:none}
 }
+
+.sold-celebration{position:fixed;inset:0;z-index:9999;display:none;place-items:center;padding:18px;background:rgba(0,0,0,.68);backdrop-filter:blur(5px)}
+.sold-celebration.show{display:grid}.sold-card{position:relative;width:min(92vw,440px);padding:32px 22px 27px;border-radius:24px;border:1px solid rgba(255,220,125,.42);background:linear-gradient(145deg,#19140b,#08080b 72%);box-shadow:0 24px 80px rgba(0,0,0,.65);text-align:center}
+.sold-x{position:absolute;right:11px;top:10px;width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font-size:26px;cursor:pointer}.sold-icon{font-size:42px}.sold-head{margin-top:5px;color:#ffe7a3;font-size:23px;font-weight:1000}.sold-name{margin-top:18px;font-size:25px;font-weight:1000}.sold-name b{color:#ffe49a}.sold-price{margin-top:10px;font-size:19px}.sold-price b{font-size:28px;color:#ffdf7b}.sold-sign{margin-top:22px;color:#d4b66f;font-weight:1000}
 </style>
 </head>
 <body>
@@ -407,6 +411,20 @@ function tick(){
 tick();
 setInterval(tick,1000);
 render();
+
+let soldCelebrationTimer=null;
+function closeSoldCelebration(){const el=document.getElementById('soldCelebration');if(el)el.classList.remove('show');if(soldCelebrationTimer){clearTimeout(soldCelebrationTimer);soldCelebrationTimer=null;}}
+function showSoldCelebration(data={}){const el=document.getElementById('soldCelebration');if(!el)return;document.getElementById('soldWinner').textContent=String(data.winner||'낙찰자');document.getElementById('soldPrice').textContent=Number(data.price||0).toLocaleString('ko-KR')+'원';el.classList.add('show');if(soldCelebrationTimer)clearTimeout(soldCelebrationTimer);soldCelebrationTimer=setTimeout(closeSoldCelebration,10000);}
+document.getElementById('soldCelebrationClose')?.addEventListener('click',closeSoldCelebration);
+socket.on('auction_sold_celebration',showSoldCelebration);
+
 </script>
+
+<div class="sold-celebration" id="soldCelebration"><div class="sold-card">
+<button class="sold-x" id="soldCelebrationClose" aria-label="닫기">×</button>
+<div class="sold-icon">🎉</div><div class="sold-head">낙찰을 축하합니다!</div>
+<div class="sold-name"><b id="soldWinner">-</b> 님 축하합니다</div>
+<div class="sold-price"><b id="soldPrice">0원</b>에 낙찰되었습니다.</div>
+<div class="sold-sign">- 바카라산악회 -</div></div></div>
 </body>
 </html>
