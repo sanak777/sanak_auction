@@ -21,7 +21,13 @@ body{padding:10px}button,input{font:inherit}.wrap{width:min(1450px,100%);margin:
 
 .slot-picker{margin-top:8px;padding:9px;border:1px solid var(--line);border-radius:12px;background:#0b0b0f}
 .slot-search{width:100%;height:40px;border-radius:10px;border:1px solid var(--line);background:#09090c;color:#fff;padding:0 10px;font-weight:800}
-.slot-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:300px;overflow:auto;margin-top:7px}
+.slot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-height:560px;overflow:auto;margin-top:8px}
+@media(max-width:980px){.slot-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:420px}}
+@media(min-width:981px){
+  .grid{grid-template-columns:250px minmax(0,1fr) 520px}
+  .slot-card{padding:6px}
+  .slot-card b{font-size:10px}
+}
 .slot-card{padding:5px;border-radius:10px;border:1px solid rgba(241,207,122,.11);background:#15151a;color:#fff;text-align:left;cursor:pointer}
 .slot-card img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:7px;display:block}
 .slot-card b{display:block;font-size:9px;line-height:1.25;margin-top:5px}
